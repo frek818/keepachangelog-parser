@@ -1,0 +1,40 @@
+# Byte-code files
+*.py[cod]
+__pycache__/
+
+# Distribution / packaging
+.Python
+build/
+dist/
+wheels/
+*.egg-info/
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+# specific file for pyenv
+.python-version 
+
+# Editors and IDEs
+# VSCode
+.vscode/
+
+# PyCharm
+.idea/
+
+# Testing
+.pytest_cache/
+.coverage
+
+# Miscellaneous
+# OS generated files
+.DS_Store
+# ipython notebook checkpoints
+.ipynb_checkpoints
+# Ruff cache
+.ruff_cache/
+
+pyrightconfig.json
