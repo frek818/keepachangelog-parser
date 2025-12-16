@@ -1,4 +1,3 @@
-
 from pyparsing import (
     Combine,
     DelimitedList,
@@ -10,7 +9,6 @@ from pyparsing import (
     Regex,
     SkipTo,
     White,
-    Word,
     ZeroOrMore,
     rest_of_line,
     token_map,
@@ -77,7 +75,7 @@ def UnreleasedSection():
     return Group(
         Combine(UnreleasedHeading())("version")
         + common.maybeLineEndings().suppress()
-        + OneOrMore(ChangeTypeSection())("change_types")
+        + ZeroOrMore(ChangeTypeSection())("change_types")
         + common.maybeLineEndings().suppress()
     )
 
@@ -141,7 +139,7 @@ def ReleaseHeading():
 
 def ChangeTypeSection():
     return Group(
-        Combine(ChangeTypeHeading())("change_type")
+        Combine(ChangeTypeHeading())("type")
         + common.maybeLineEndings().suppress()
         + ChangeEntries()("entries")
         + LineEnd().suppress()
@@ -186,12 +184,16 @@ def ChangeEntries():
 def ChangeEntry():
     def post_process(x, y, tokens):
         description = SkipTo(Link()).set_parse_action(token_map(str.strip))
-        withLink = (description()("description") + Link()("link"))
-        withoutLink = (rest_of_line()("description")).set_parse_action(token_map(str.strip))
+        withLink = description()("description") + Link()("link")
+        withoutLink = (rest_of_line()("description")).set_parse_action(
+            token_map(str.strip)
+        )
 
         return (MatchFirst([withLink(), withoutLink()])).parse_string(tokens[0])
 
-    preProcessedEntry = Literal("-").suppress() + ZeroOrMore(White()).suppress() + rest_of_line()
+    preProcessedEntry = (
+        Literal("-").suppress() + ZeroOrMore(White()).suppress() + rest_of_line()
+    )
     processedEntry = preProcessedEntry().set_parse_action(post_process)
     return Group(processedEntry())
 
