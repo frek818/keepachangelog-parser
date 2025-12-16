@@ -40,7 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
                 {
                     "change_types": [
                         {
-                            "change_type": "Added",
+                            "type": "Added",
                             "entries": [
                                 {
                                     "description": "easy.",
@@ -57,7 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
                 {
                     "change_types": [
                         {
-                            "change_type": "Added",
+                            "type": "Added",
                             "entries": [
                                 {
                                     "description": "peazy",
@@ -116,7 +116,7 @@ def test_buggy_unreleased_section_trailing_newlines():
         "section": {
             "change_types": [
                 {
-                    "change_type": "Changed",
+                    "type": "Changed",
                     "entries": [
                         {
                             "description": "habla espanol",
@@ -128,26 +128,7 @@ def test_buggy_unreleased_section_trailing_newlines():
                     ],
                 },
                 {
-                    "change_type": "Added",
-                    "entries": [
-                        {
-                            "description": "habla espanol",
-                            "link": {
-                                "href": "https://www.arriba.com",
-                                "text": "si",
-                            },
-                        },
-                        {
-                            "description": "habla espanol",
-                            "link": {
-                                "href": "https://www.arriba.com",
-                                "text": "si",
-                            },
-                        },
-                    ],
-                },
-                {
-                    "change_type": "Removed",
+                    "type": "Added",
                     "entries": [
                         {
                             "description": "habla espanol",
@@ -166,7 +147,26 @@ def test_buggy_unreleased_section_trailing_newlines():
                     ],
                 },
                 {
-                    "change_type": "Fixed",
+                    "type": "Removed",
+                    "entries": [
+                        {
+                            "description": "habla espanol",
+                            "link": {
+                                "href": "https://www.arriba.com",
+                                "text": "si",
+                            },
+                        },
+                        {
+                            "description": "habla espanol",
+                            "link": {
+                                "href": "https://www.arriba.com",
+                                "text": "si",
+                            },
+                        },
+                    ],
+                },
+                {
+                    "type": "Fixed",
                     "entries": [
                         {
                             "description": "habla espanol",
@@ -205,7 +205,7 @@ def test_buggy_unreleased_section_no_trailing_newlines():
         "section": {
             "change_types": [
                 {
-                    "change_type": "Added",
+                    "type": "Added",
                     "entries": [
                         {
                             "description": "*www.keepachangelog.ca*: "
@@ -227,7 +227,7 @@ def test_buggy_unreleased_section_no_trailing_newlines():
     assert as_dict(got) == want
 
 
-def test_UnifiedReleases():
+def test_unifiedreleases():
     text = """ 
 ## [Unreleased]
 ### Added
@@ -242,7 +242,7 @@ def test_UnifiedReleases():
             {
                 "change_types": [
                     {
-                        "change_type": "Added",
+                        "type": "Added",
                         "entries": [
                             {
                                 "description": "easy.",
@@ -259,7 +259,7 @@ def test_UnifiedReleases():
             {
                 "change_types": [
                     {
-                        "change_type": "Added",
+                        "type": "Added",
                         "entries": [
                             {
                                 "description": "peazy",
@@ -281,7 +281,7 @@ def test_UnifiedReleases():
     assert as_dict(got) == want
 
 
-def test_buggy_ChangeTypeSection():
+def test_buggy_changetypesection():
     text = """### Added
 - milk to cart
 
@@ -290,7 +290,7 @@ def test_buggy_ChangeTypeSection():
 """
     want = {
         "change_type_section": {
-            "change_type": "Added",
+            "type": "Added",
             "entries": [{"description": "milk to cart"}],
         }
     }
@@ -299,7 +299,7 @@ def test_buggy_ChangeTypeSection():
     assert as_dict(got) == want
 
 
-def test_buggy_UnreleasedSection_multiple_ChangeTypeSections():
+def test_buggy_unreleasedsection_multiple_changetypesections():
 
     text = """## [Unreleased]
 
@@ -321,11 +321,11 @@ def test_buggy_UnreleasedSection_multiple_ChangeTypeSections():
         "unreleased_section": {
             "change_types": [
                 {
-                    "change_type": "Added",
+                    "type": "Added",
                     "entries": [{"description": "milk to cart"}],
                 },
-                {"change_type": "Changed", "entries": [{"description": "diaper"}]},
-                {"change_type": "Security", "entries": [{"description": "hacked"}]},
+                {"type": "Changed", "entries": [{"description": "diaper"}]},
+                {"type": "Security", "entries": [{"description": "hacked"}]},
             ],
             "version": "Unreleased",
         }

@@ -13,9 +13,10 @@ closeP = Literal(")")
 
 maybeLineEndings = ZeroOrMore(LineEnd()).suppress()
 
-trailingWhiteSpace = ZeroOrMore(Word(' \t'))
+trailingWhiteSpace = ZeroOrMore(Word(" \t"))
 
 word = Word(printables, excludeChars="-\n")
+
 
 def SemVer():
     integer = Word(nums).setParseAction(lambda t: int(t[0]))  # Convert to integer

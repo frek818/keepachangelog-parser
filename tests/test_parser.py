@@ -35,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
                 {
                     "change_types": [
                         {
-                            "change_type": "Added",
+                            "type": "Added",
                             "entries": [{"description": "Initial commit"}],
                         }
                     ],
@@ -105,7 +105,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
                 {
                     "change_types": [
                         {
-                            "change_type": "Added",
+                            "type": "Added",
                             "entries": [
                                 {
                                     "description": "*docs/*:New Stuff",
@@ -122,11 +122,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
                 {
                     "change_types": [
                         {
-                            "change_type": "Added",
+                            "type": "Added",
                             "entries": [{"description": "Initial"}],
                         },
                         {
-                            "change_type": "Fixed",
+                            "type": "Fixed",
                             "entries": [
                                 {
                                     "description": "*docs/*:New Stuff",
@@ -207,7 +207,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
                 {
                     "change_types": [
                         {
-                            "change_type": "Added",
+                            "type": "Added",
                             "entries": [{"description": "Initial"}],
                         }
                     ],
@@ -216,7 +216,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
                 {
                     "change_types": [
                         {
-                            "change_type": "Added",
+                            "type": "Added",
                             "entries": [
                                 {
                                     "description": "*docs/*:New Stuff",
@@ -234,7 +234,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
                 {
                     "change_types": [
                         {
-                            "change_type": "Changed",
+                            "type": "Changed",
                             "entries": [
                                 {
                                     "description": "*docs/*:New Stuff",
@@ -257,7 +257,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     assert as_dict(got) == want
 
 
-def test_ChangeTypeHeading():
+def test_changetypeheading():
     change_type = parser.ChangeTypeHeading()
     assert change_type.parse_string("### Added").as_list() == ["Added"]
     assert change_type.parse_string("### Changed").as_list() == ["Changed"]
@@ -265,7 +265,7 @@ def test_ChangeTypeHeading():
     assert change_type.parse_string("### Fixed").as_list() == ["Fixed"]
 
 
-def test_ReleaseHeading():
+def test_releaseheading():
     text = "## [1.25.0] - 2025-12-10\n"
     want = {"release_heading": {"release_date": "2025-12-10", "version": "1.25.0"}}
     release_heading = parser.ReleaseHeading()("release_heading")
@@ -273,14 +273,14 @@ def test_ReleaseHeading():
     assert as_dict(got) == want
 
 
-def test_ChangeTypeSection():
+def test_changetypesection():
     text = """### Added
 - *keepachangelog.com*: hello world. [abc](https://dev.azure.com/)
 - *api.keepachangelog.com*: Added something cool. [ADO#435](https://gitbug.com/)
 """
     want = {
         "change_section": {
-            "change_type": "Added",
+            "type": "Added",
             "entries": [
                 {
                     "description": "*keepachangelog.com*: hello world.",
@@ -298,7 +298,7 @@ def test_ChangeTypeSection():
     assert as_dict(got) == want
 
 
-def test_UnreleasedSection():
+def test_unreleasedsection():
     text = """## [Unreleased]
 ### Added
 - asdf [fancy](https://www.ford.com/escort) 
@@ -308,7 +308,7 @@ def test_UnreleasedSection():
         "unreleased": {
             "change_types": [
                 {
-                    "change_type": "Added",
+                    "type": "Added",
                     "entries": [
                         {
                             "description": "asdf",
@@ -328,7 +328,7 @@ def test_UnreleasedSection():
     assert as_dict(got) == want
 
 
-def test_UnreleasedSection_greedy():
+def test_unreleasedsection_greedy():
     text = """## [Unreleased]
 ### Added
 - Initial world
@@ -347,7 +347,7 @@ def test_UnreleasedSection_greedy():
         "unreleased": {
             "change_types": [
                 {
-                    "change_type": "Added",
+                    "type": "Added",
                     "entries": [{"description": "Initial    asdf"}],
                 }
             ],
@@ -359,7 +359,7 @@ def test_UnreleasedSection_greedy():
     assert as_dict(got) == want
 
 
-def test_Link():
+def test_link():
     want = {
         "link": {
             "text": "onward & upward",
@@ -371,7 +371,7 @@ def test_Link():
     assert as_dict(got) == want
 
 
-def test_UnreleasedReference():
+def test_unreleasedreference():
     text = "[Unreleased]: <https://one-two-three.com/>"
     want = {
         "reference": {
@@ -384,7 +384,7 @@ def test_UnreleasedReference():
     assert as_dict(got) == want
 
 
-def test_ReleaseReference():
+def test_releasereference():
     text = "[1.2.3]: <https://one-two-three.com/>"
     want = {"reference": {"link": "https://one-two-three.com/", "version": "1.2.3"}}
 
@@ -393,7 +393,7 @@ def test_ReleaseReference():
     assert as_dict(got) == want
 
 
-def test_ChangeEntry():
+def test_changeentry():
     change_entry = parser.ChangeEntry()("change_entry")
 
     got = change_entry.parse_string(
@@ -415,7 +415,7 @@ def test_ChangeEntry():
     }
 
 
-def test_ChangeEntries():
+def test_changeentries():
     text = """- abc def
 - cba fed [xyz](http://www.lmnop.com)
 """
@@ -433,7 +433,7 @@ def test_ChangeEntries():
     assert as_dict(got) == want
 
 
-def test_ReleaseSection():
+def test_releasesection():
     text = """## [1.2.3] - 2025-11-12
 ### Added
 - milk to cart
@@ -441,7 +441,7 @@ def test_ReleaseSection():
     want = {
         "release_section": {
             "change_types": [
-                {"change_type": "Added", "entries": [{"description": "milk to cart"}]}
+                {"type": "Added", "entries": [{"description": "milk to cart"}]}
             ],
             "release_date": "2025-11-12",
             "version": "1.2.3",
@@ -452,7 +452,7 @@ def test_ReleaseSection():
     assert as_dict(got) == want
 
 
-def test_ReleaseReferencesSection():
+def test_releasereferencessection():
     text = """
 [Unreleased]: <https://www.unreleased.com>
 [1.0.0]: <https://www.released.com/1.0.0>
@@ -469,7 +469,7 @@ def test_ReleaseReferencesSection():
     assert as_dict(got) == want
 
 
-def test_UnifiedReleases():
+def test_unifiedreleases():
 
     text = """
 ## [Unreleased]      
@@ -488,7 +488,7 @@ def test_UnifiedReleases():
             {
                 "change_types": [
                     {
-                        "change_type": "Added",
+                        "type": "Added",
                         "entries": [{"description": "Initial " "commit"}],
                     }
                 ],
@@ -497,7 +497,7 @@ def test_UnifiedReleases():
             {
                 "change_types": [
                     {
-                        "change_type": "Added",
+                        "type": "Added",
                         "entries": [{"description": "Initial " "commit"}],
                     }
                 ],
